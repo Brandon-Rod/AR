@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "cup_saucer_set.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
