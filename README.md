@@ -17,6 +17,7 @@
 - Third Party Library
 
 ## Technologies Used
+- SwiftUI
 - ARKit
 - RealityKit
 - Combine
