@@ -32,32 +32,27 @@ struct ARViewRepresentable: UIViewRepresentable {
         
     }
     
-    private func updateScene(for arView: CustomARView)  {
-        
-        arView.focusEntity?.isEnabled  = placementSettings.selectedModel != nil
+    private func updateScene(for arView: CustomARView?) {
+        guard let arView = arView else { return }
         
         if let confirmedModel = placementSettings.confirmedModel, let modelEntity = confirmedModel.modelEntity {
-            
             place(modelEntity, in: arView)
-            
             placementSettings.confirmedModel = nil
-            
         }
-        
     }
-    
     private func place(_ modelEntity: ModelEntity, in arView: ARView) {
-        
         let clonedEntity = modelEntity.clone(recursive: true)
         clonedEntity.generateCollisionShapes(recursive: true)
         
         arView.installGestures([.translation, .rotation], for: clonedEntity)
         
-        let anchorEntity = AnchorEntity(plane: .any)
-        anchorEntity.addChild(clonedEntity)
-        
-        arView.scene.addAnchor(anchorEntity)
-                
+        // Raycast to detect a plane
+        if let raycastResult = arView.raycast(from: arView.center, allowing: .existingPlaneGeometry, alignment: .horizontal).first {
+            let anchorEntity = AnchorEntity(world: raycastResult.worldTransform)
+            anchorEntity.addChild(clonedEntity)
+            arView.scene.addAnchor(anchorEntity)
+        }
     }
-    
 }
+
+

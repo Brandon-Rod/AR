@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct ModelsByCategoryGridView: View {
     
     @Binding var showBrowse: Bool
@@ -14,21 +15,16 @@ struct ModelsByCategoryGridView: View {
     let models = Models()
     
     var body: some View {
-        
         VStack {
-            
             ForEach(ModelCategory.allCases, id: \.self) { category in
+                // No need for optional binding here
+                let modelsByCategory = models.get(category: category)
                 
-                if let modelsByCategory = models.get(category: category) {
-                    
+                // Check if the array is not empty before creating the HorizontalGridView
+                if !modelsByCategory.isEmpty {
                     HorizontalGridView(showBrowse: $showBrowse, title: category.label, items: modelsByCategory)
-                    
                 }
-                
             }
-            
         }
-        
     }
-    
 }
